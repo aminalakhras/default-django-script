@@ -1,0 +1,18 @@
+
+{% extends "base.html" %}
+{% load static%}
+
+{% block title %}log in  page{% endblock %}
+
+{% block content %}
+
+  {% include 'logModal.html'%}
+
+<!-- open modal when page opens -->
+  <script type="text/javascript">
+      $(window).on('load',function(){
+          $('#sign-up').modal('show');
+      });
+  </script>
+
+{% endblock %}

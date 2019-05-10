@@ -10,6 +10,19 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
+
+# WARNING ; BE SURE TO CHANGE THE SECRET_KEY AND ANY OTHER KEYS IN THIS FILE FOR YOUR OWN SECURITY
+# NOTICE : you have to change "website_name" to make heroku allow your app as a host
+
+
+
+database_status = "default" # it can be "local" or "global" or "default"
+logging_type = "cmd" # it can be "cmd" or "file"
+website_name = "YOUR_WEBSITE_NAME"
+SECRET_KEY = '21itija)lvu33=%%4$nr8$9%av&2vum0f!o7v8t5#^7d#*8fn!'
+
+
+
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -20,12 +33,22 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '21itija)lvu33=%%4$nr8$9%av&2vum0f!o7v8t5#^7d#*8fn!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+
+ALLOWED_HOSTS = [
+    'localhost',
+    "127.0.0.1",
+     "0.0.0.0",
+     "{}.herokuapp.com".format(website_name),
+     "herokuapp.com",
+     "https://{}.herokuapp.com/".format(website_name),
+     "https://herokuapp.com/",
+     ".herokuapp.com"
+]
+
 
 
 # Application definition
@@ -51,6 +74,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+
 ]
 
 ROOT_URLCONF = 'youtubeService.urls'
@@ -77,12 +102,104 @@ WSGI_APPLICATION = 'youtubeService.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
+
+
+if database_status is "local":
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': '',#database
+            'USER': '',# postgres username
+            'PASSWORD': '', # postgres password
+            'HOST': '', # datanase host
+            'PORT': '', # database port
+        }
+    }
+
+elif database_status is "global":
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': '',#database
+            'USER': '',
+            'PASSWORD': '',
+            'HOST': '',
+            'PORT': '',
+        }
+    }
+
+else:
+    DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+
+if logging_type is "file":
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'formatters': {
+            'verbose': {
+                'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+                'datefmt' : "%d/%b/%Y %H:%M:%S"
+            },
+            'simple': {
+                'format': '%(levelname)s %(message)s'
+            },
+        },
+        'handlers': {
+            'file': {
+                'level': 'DEBUG',
+                'class': 'logging.FileHandler',
+                'filename': 'mysite.log',
+                'formatter': 'verbose'
+            },
+        },
+        'loggers': {
+            'django': {
+                'handlers':['file'],
+                'propagate': True,
+                'level':'DEBUG',
+            },
+            'MYAPP': {
+                'handlers': ['file'],
+                'level': 'DEBUG',
+            },
+        }
+    }
+elif logging_type is "cmd":
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'formatters': {
+            'verbose': {
+                'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+            },
+        },
+        'handlers': {
+            'console': {
+                'level': 'NOTSET',
+                'class': 'logging.StreamHandler',
+                'formatter': 'verbose'
+            }
+        },
+        'loggers': {
+            '': {
+                'handlers': ['console'],
+                'level': 'NOTSET',
+            },
+            'django.request': {
+                'handlers': ['console'],
+                'propagate': False,
+                'level': 'ERROR'
+            }
+        }
+    }
+else:
+    pass
 
 
 # Password validation
@@ -122,3 +239,18 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# print(BASE_DIR)
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/1.9/howto/static-files/
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# STATIC_URL = '/static/'
+
+# Extra places for collectstatic to find static files.
+STATICFILES_DIRS = (
+    os.path.join(STATIC_ROOT, 'static'),
+)

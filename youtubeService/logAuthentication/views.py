@@ -97,7 +97,7 @@ def user_login(request):
             return HttpResponseRedirect('/')
         else:
             return HttpResponseRedirect("/")
-    return render(request, "login.html")
+    return render(request, "logInPage.html")
 
 
 def log_out(request):
@@ -112,4 +112,4 @@ def signup(request):
     """
     returns signup page html
     """
-    return render(request, "signup.html")
+    return render(request, "signUpPage.html")
