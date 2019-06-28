@@ -1,7 +1,5 @@
 from django.shortcuts import render
 
-# Create your views here.
-
 
 
 def mainPage(request):
@@ -16,5 +14,4 @@ def temp(request):
     """
     a temporary function for adding new features
     """
-
     return render(request, template_name="temp.html", context=None)

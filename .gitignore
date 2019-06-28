@@ -9,3 +9,4 @@ __pycache__/
 *.csv
 extra_files/
 data/
+youtubeService/settings.ini
