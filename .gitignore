@@ -10,3 +10,4 @@ __pycache__/
 extra_files/
 data/
 youtubeService/settings.ini
+venv/
