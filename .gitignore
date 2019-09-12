@@ -11,3 +11,4 @@ extra_files/
 data/
 youtubeService/settings.ini
 venv/
+youtubeService/environment_variables
